@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenRatio</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f4fff7;
+}
+
+nav{
+background:#00695c;
+color:white;
+padding:18px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:30px;
+font-weight:bold;
+}
+
+.hero{
+background:linear-gradient(135deg,#12c58d,#008c6a);
+color:white;
+padding:80px 20px;
+text-align:center;
+}
+
+.hero h1{
+font-size:48px;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:18px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 5px 25px rgba(0,0,0,.1);
+margin-top:20px;
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-top:15px;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:8px;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+button{
+width:100%;
+padding:15px;
+background:#008c6a;
+color:white;
+border:none;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+margin-top:20px;
+cursor:pointer;
+}
+
+button:hover{
+background:#00695c;
+}
+
+.result{
+margin-top:20px;
+padding:20px;
+background:#e9faf3;
+border-radius:10px;
+}
+
+footer{
+margin-top:50px;
+background:#00695c;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+</style>
+</head>
+
+
+
+
+
+<body>
+
+<nav>
+<div class="logo">🌱 GreenRatio</div>
+<div>Smart Plantation Assistant</div>
+</nav>
+
+<section class="hero">
+
+<h1>🌱 GreenRatio</h1>
+
+<p>
+Plan the Green Before You Build the Gray
+</p>
+
+<br>
+
+<p>
+AI Based Tree, Flower & Crop Recommendation
+</p>
+
+</section>
+
+<div class="container">
+
+<div class="card">
+
+<h2>🌿 Smart Plantation Recommendation</h2>
+
+<label>State</label>
+
+<select id="state">
+<option>Andhra Pradesh</option>
+<option>Arunachal Pradesh</option>
+<option>Assam</option>
+<option>Bihar</option>
+<option>Chhattisgarh</option>
+<option>Goa</option>
+<option>Gujarat</option>
+<option>Haryana</option>
+<option>Himachal Pradesh</option>
+<option>Jharkhand</option>
+<option>Karnataka</option>
+<option>Kerala</option>
+<option>Madhya Pradesh</option>
+<option>Maharashtra</option>
+<option>Manipur</option>
+<option>Meghalaya</option>
+<option>Mizoram</option>
+<option>Nagaland</option>
+<option>Odisha</option>
+<option>Punjab</option>
+<option>Rajasthan</option>
+<option>Sikkim</option>
+<option>Tamil Nadu</option>
+<option>Telangana</option>
+<option>Tripura</option>
+<option>Uttar Pradesh</option>
+<option>Uttarakhand</option>
+<option>West Bengal</option>
+<option>Delhi</option>
+</select>
+
+<label>District</label>
+
+<input
+type="text"
+id="district"
+placeholder="Enter Your District">
+
+<label>Season</label>
+
+<select id="season">
+<option>Summer ☀️</option>
+<option>Monsoon 🌧️</option>
+<option>Winter ❄️</option>
+</select>
+
+<label>What Do You Want To Grow?</label>
+
+<select id="growType">
+<option>Tree 🌳</option>
+<option>Flower 🌸</option>
+<option>Crop 🌾</option>
+</select>
+
+<label>Plot Area (m²)</label>
+
+<input
+type="number"
+id="plotArea"
+placeholder="Enter Plot Area">
+
+<label>Construction Area (m²)</label>
+
+<input
+type="number"
+id="constructionArea"
+placeholder="Enter Construction Area">
+
+<label>Open Area (m²)</label>
+
+<input
+type="number"
+id="openArea"
+readonly>
+
+<label>AQI</label>
+
+<input
+type="text"
+id="aqi"
+readonly>
+
+<button onclick="calculateGreenRatio()">
+Get Smart Recommendation
+</button>
+
+<div
+class="result"
+id="greenResult">
+
+Results will appear here...
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const stateAQI = {
+"Andhra Pradesh":85,
+"Arunachal Pradesh":35,
+"Assam":60,
+"Bihar":145,
+"Chhattisgarh":90,
+"Goa":40,
+"Gujarat":120,
+"Haryana":170,
+"Himachal Pradesh":45,
+"Jharkhand":130,
+"Karnataka":75,
+"Kerala":40,
+"Madhya Pradesh":100,
+"Maharashtra":110,
+"Manipur":45,
+"Meghalaya":40,
+"Mizoram":35,
+"Nagaland":38,
+"Odisha":95,
+"Punjab":160,
+"Rajasthan":130,
+"Sikkim":25,
+"Tamil Nadu":65,
+"Telangana":95,
+"Tripura":45,
+"Uttar Pradesh":190,
+"Uttarakhand":50,
+"West Bengal":110,
+"Delhi":285
+};
+
+
+function updateAQI(){
+
+let state =
+document.getElementById("state").value;
+
+let aqi =
+stateAQI[state] || "N/A";
+
+document.getElementById("aqi").value =
+aqi;
+
+}
+updateAQI();
+
+document.getElementById("state")
+.addEventListener("change", updateAQI);
+
+window.onload = function(){
+
+updateAQI();
+updateOpenArea();
+
+};
+
+document.getElementById("plotArea")
+.addEventListener("input", updateOpenArea);
+
+document.getElementById("constructionArea")
+.addEventListener("input", updateOpenArea);
+
+function updateOpenArea(){
+
+let plot =
+Number(document.getElementById("plotArea").value) || 0;
+
+let construction =
+Number(document.getElementById("constructionArea").value) || 0;
+
+let openArea =
+plot - construction;
+
+if(openArea < 0){
+openArea = 0;
+}
+
+document.getElementById("openArea").value =
+openArea;
+
+}
+
+function calculateGreenRatio(){
+
+let state =
+document.getElementById("state").value;
+
+let district =
+document.getElementById("district").value;
+
+let season =
+document.getElementById("season").value;
+
+let growType =
+document.getElementById("growType").value;
+
+let openArea =
+document.getElementById("openArea").value;
+
+
+let recommendation = "";
+let distance = "";
+let water = "";
+let method = "";
+let benefit = "";
+let rainfall = "";
+let soil = "";
+let difficulty = "";
+
+if(state=="Bihar"){
+
+if(growType.includes("Tree")){
+
+if(season.includes("Monsoon")){
+recommendation="Mango, Neem, Peepal";
+}
+
+else if(season.includes("Winter")){
+recommendation="Guava, Amla";
+}
+
+else{
+recommendation="Neem, Banyan";
+}
+
+distance="6-8 meters";
+water="15 litres/week";
+method="Pit plantation with organic compost";
+benefit="High survival rate in Bihar climate";
+
+distance="6-8 meters";
+water="15 litres/week";
+method="Pit plantation with organic compost";
+benefit="High survival rate in Bihar climate";
+
+rainfall="600-1200 mm";
+soil="Loamy Soil";
+difficulty="Easy";
+
+}
+
+else if(growType.includes("Flower")){
+
+recommendation="Marigold, Rose, Sunflower";
+distance="30 cm";
+water="3 times/week";
+method="Raised bed plantation";
+benefit="Good flowering in fertile alluvial soil";
+
+rainfall="500-1000 mm";
+soil="Sandy Loam";
+difficulty="Medium";
+
+}
+
+else{
+
+recommendation="Rice, Wheat, Maize";
+distance="25 cm";
+water="Moderate to High";
+method="Line sowing method";
+benefit="Suitable for Bihar agriculture";
+
+rainfall="1000-1500 mm";
+soil="Agricultural Fertile Soil";
+difficulty="Medium";
+
+}
+
+}
+
+else if(state=="Karnataka"){
+
+if(growType.includes("Tree")){
+
+recommendation="Sandalwood, Honge, Neem";
+distance="6-8 meters";
+water="Moderate";
+method="Organic pit plantation";
+benefit="Suitable for red soil";
+
+rainfall="500-900 mm";
+soil="Red Soil";
+difficulty="Medium";
+
+}
+
+else if(growType.includes("Flower")){
+
+recommendation="Jasmine, Rose";
+distance="40 cm";
+water="Moderate";
+method="Drip irrigation";
+benefit="Excellent commercial value";
+
+rainfall="400-800 mm";
+soil="Sandy Loam";
+difficulty="Medium";
+
+}
+
+else{
+
+recommendation="Coffee, Ragi, Sugarcane";
+distance="30 cm";
+water="Depends on crop";
+method="Mixed farming";
+benefit="High regional suitability";
+
+rainfall="600-1200 mm";
+soil="Agricultural Soil";
+difficulty="Medium";
+
+}
+
+}
+
+else if(state=="Maharashtra"){
+
+if(growType.includes("Tree")){
+
+recommendation="Neem, Gulmohar, Rain Tree";
+distance="7 meters";
+water="Moderate";
+method="Organic plantation";
+benefit="Heat resistant";
+
+rainfall="700-1000 mm";
+soil="Black Soil";
+difficulty="Easy";
+
+}
+
+else if(growType.includes("Flower")){
+
+recommendation="Hibiscus, Rose";
+distance="40 cm";
+water="Twice weekly";
+method="Raised beds";
+benefit="Attractive flowering";
+
+rainfall="500-900 mm";
+soil="Loamy Soil";
+difficulty="Medium";
+
+}
+
+else{
+
+recommendation="Cotton, Soybean";
+distance="25 cm";
+water="Moderate";
+method="Row plantation";
+benefit="High yield";
+
+rainfall="700-1200 mm";
+soil="Black Cotton Soil";
+difficulty="Medium";
+
+}
+
+}
+
+else{
+
+if(growType.includes("Tree")){
+
+recommendation="Neem, Banyan, Peepal";
+distance="6-8 meters";
+water="15 litres/week";
+method="Pit plantation";
+benefit="Good AQI improvement";
+
+rainfall="600-1200 mm";
+soil="Loamy Soil";
+difficulty="Easy";
+
+}
+
+else if(growType.includes("Flower")){
+
+recommendation="Rose, Marigold";
+distance="30 cm";
+water="Twice weekly";
+method="Raised beds";
+benefit="Easy maintenance";
+
+rainfall="500-1000 mm";
+soil="Sandy Loam";
+difficulty="Medium";
+
+}
+
+else{
+
+recommendation="Rice, Wheat";
+distance="20 cm";
+water="Moderate";
+method="Traditional sowing";
+benefit="Reliable crop production";
+
+rainfall="600-1200 mm";
+soil="Agricultural Soil";
+difficulty="Medium";
+
+}
+
+}
+
+let aiAdvice = "";
+
+if(season.includes("Summer")){
+
+aiAdvice =
+"Hot weather detected. Use mulching, water plants in morning/evening and choose heat-resistant varieties.";
+
+}
+
+else if(season.includes("Monsoon")){
+
+aiAdvice =
+"Good rainfall expected. Ensure proper drainage and plant fast-growing varieties.";
+
+}
+
+else{
+
+aiAdvice =
+"Cool season detected. Reduce watering frequency and prefer winter-friendly varieties.";
+
+}
+
+
+let estimatedPlants = 0;
+
+if(growType.includes("Tree")){
+
+estimatedPlants =
+Math.floor(openArea / 36);
+
+}
+
+else if(growType.includes("Flower")){
+
+estimatedPlants =
+Math.floor(openArea / 1);
+
+}
+
+else{
+
+estimatedPlants =
+Math.floor(openArea / 2);
+
+}
+
+
+document.getElementById("greenResult").innerHTML =
+
+"<div style='background:white;padding:20px;border-radius:15px'>" +
+
+"<h2 style='color:#008c6a'>🌱 AI Green Recommendation Report</h2><hr><br>" +
+
+
+"<b>State:</b> " + state +
+
+"<br><br>" +
+
+"<b>District:</b> " + district +
+
+"<br><br>" +
+
+"<b>Season:</b> " + season +
+
+"<br><br>" +
+
+"<b>Grow Type:</b> " + growType +
+
+"<br><br>" +
+
+"<b>AQI:</b> " +
+document.getElementById("aqi").value +
+
+"<br><br>" +
+
+"<b>Air Quality Status:</b> " +
+
+(
+Number(document.getElementById("aqi").value) < 50
+? "Excellent ✅"
+
+: Number(document.getElementById("aqi").value) < 100
+? "Good 🟢"
+
+: Number(document.getElementById("aqi").value) < 200
+? "Moderate 🟡"
+
+: "Poor 🔴"
+) +
+
+
+"<br><br>" +
+
+"<b>Open Area:</b> " +
+openArea + " m²" +
+
+"<br><br>" +
+
+"<b>Suggested Plants:</b> " +
+recommendation +
+
+"<br><br>" +
+
+"<b>Planting Distance:</b> " +
+distance +
+
+"<br><br>" +
+
+"<b>Water Requirement:</b> " +
+water +
+
+"<br><br>" +
+
+"<b>Best Growing Method:</b> " +
+method +
+
+"<br><br>" +
+
+"<b>Benefits:</b> " +
+
+benefit +
+
+"<br><br>" +
+
+"<b>Suitable Rainfall:</b> " +
+rainfall +
+
+"<br><br>" +
+
+"<b>Recommended Soil:</b> " +
+soil +
+
+"<br><br>" +
+
+"<b>Growing Difficulty:</b> " +
+difficulty +
+
+
+
+"<br><br>" +
+
+"<b>AI Advice:</b> " +
+aiAdvice +
+
+"<br><br>" +
+
+"<b>Success Probability:</b> 85%" +
+
+"<br><br>" +
+
+"<b>Soil Recommendation:</b> Organic compost mixed with top soil" +
+
+"</div>";
+
+}
+
+</script>
+
+<footer>
+© 2026 GreenRatio
+</footer>
+
+</body>
+</html>
